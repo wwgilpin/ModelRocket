@@ -69,6 +69,10 @@ public struct JSON {
             return JSON()
         }
     }
+    
+    public var isNil: Bool {
+        return (object == nil)
+    }
 }
 
 // MARK: - Printable
