@@ -209,3 +209,18 @@ extension UInt: JSONTransformable {
         return self
     }
 }
+
+// MARK: Int64
+
+extension Int64 : JSONTransformable
+{
+    public static func fromJSON(json: ModelRocket.JSON) -> Int64?
+    {
+        return JSON.object as? Int64
+    }
+    
+    public func toJSON() -> AnyObject
+    {
+        return NSNumber(longLong: self)
+    }
+}
