@@ -40,7 +40,7 @@ class ModelRocketTests: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         
         // Setup test model
-        var jsonString = "{\"string\" : \"Test string\", \"date\" : \"2015-02-04T18:30:15.000Z\", \"local_date\" : \"2015-02-04T18:30:15.000-0600\", \"color\" : \"#00FF00\", \"bool\" : true, \"url\" : \"http://ovenbits.com\", \"number\": 3, \"double\" : 7.5, \"float\" : 4.75, \"int\" : -23, \"u_int\" : 25, \"string_enum\" : \"String1\", \"int_enum\" : 0}"
+        var jsonString = "{\"string\" : \"Test string\", \"date\" : \"2015-02-04T18:30:15.000Z\", \"local_date\" : \"2015-02-04T18:30:15.000-0600\", \"color\" : \"#00FF00\", \"bool\" : true, \"url\" : \"http://ovenbits.com\", \"number\": 3, \"double\" : 7.5, \"float\" : 4.75, \"int\" : -23, \"u_int\" : 25, \"int64\" : 2200000000, \"string_enum\" : \"String1\", \"int_enum\" : 0}"
         var jsonData = jsonString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
         var json = JSON(data: jsonData!)
         testModel = TestModel(json: json)
@@ -76,7 +76,7 @@ class ModelRocketTests: XCTestCase {
         testVeryComplexNestedModel = TestVeryComplexNestedModel(json: json)
         
         // Setup test subclass model
-        jsonString = "{\"string\" : \"Test string\", \"date\" : \"2015-02-04T18:30:15.000Z\", \"local_date\" : \"2015-02-04T18:30:15.000-0600\", \"color\" : \"#00FF00\", \"bool\" : true, \"url\" : \"http://ovenbits.com\", \"number\": 3, \"double\" : 7.5, \"float\" : 4.75, \"int\" : -23, \"u_int\" : 25, \"string2\" : \"Test string 2\"}"
+        jsonString = "{\"string\" : \"Test string\", \"date\" : \"2015-02-04T18:30:15.000Z\", \"local_date\" : \"2015-02-04T18:30:15.000-0600\", \"color\" : \"#00FF00\", \"bool\" : true, \"url\" : \"http://ovenbits.com\", \"number\": 3, \"double\" : 7.5, \"float\" : 4.75, \"int\" : -23, \"u_int\" : 25, \"int64\" : 2200000000, \"string2\" : \"Test string 2\"}"
         jsonData = jsonString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
         json = JSON(data: jsonData!)
         testSubclassModel = TestSubclassModel(json: json)
@@ -116,6 +116,7 @@ class ModelRocketTests: XCTestCase {
         XCTAssertTrue(testModel.float == Property<Float>(key: "float", defaultValue: 4.75), "Properties not equal")
         XCTAssertTrue(testModel.int == Property<Int>(key: "int", defaultValue: -23), "Properties not equal")
         XCTAssertTrue(testModel.uInt == Property<UInt>(key: "u_int", defaultValue: 25), "Properties not equal")
+        XCTAssertTrue(testModel.int64 == Property<Int64>(key: "int64", defaultValue: 2200000000), "Properties not equal")
         XCTAssertTrue(testModel.stringEnum == Property<TestStringEnum>(key: "string_enum", defaultValue: .String1), "Properties not equal")
         XCTAssertTrue(testModel.intEnum == Property<TestIntEnum>(key: "int_enum", defaultValue: .Int1), "Properties not equal")
         XCTAssertFalse(testModel.string == Property<String>(key: "string", defaultValue: "Test string here"), "Properties shouldn't be equal")
@@ -244,6 +245,15 @@ class ModelRocketTests: XCTestCase {
         }
     }
     
+    func testInt64() {
+        if let int64 = testModel.int64.value {
+            XCTAssertEqual(int64, Int64(2200000000), "Int64s not equal")
+        }
+        else {
+            XCTAssert(false, "Test int64 should not be nil")
+        }
+    }
+
     func testJSON() {
         if let json = testModel.json().json {
             XCTAssertEqual(json["string"].stringValue, "Test string", "Strings not equal")
@@ -264,6 +274,7 @@ class ModelRocketTests: XCTestCase {
             XCTAssertEqual(json["float"].floatValue, Float(4.75), "Floats not equal")
             XCTAssertEqual(json["int"].intValue, -23, "Ints not equal")
             XCTAssertEqual(json["u_int"].uIntValue, UInt(25), "UInts not equal")
+            XCTAssertEqual(json["int64"].int64Value, Int64(2200000000), "Int64s not equal")
         }
         else {
             XCTAssert(false, "JSON should not be nil")
@@ -337,6 +348,9 @@ class ModelRocketTests: XCTestCase {
             
             if let uInt = unarchived.uInt.value { XCTAssertEqual(uInt, UInt(25), "UInts not equal") }
             else { XCTAssert(false, "Coding: uInt should not be nil") }
+
+            if let int64 = unarchived.int64.value { XCTAssertEqual(int64, Int64(2200000000), "Int64s not equal") }
+            else { XCTAssert(false, "Coding: int64 should not be nil") }
             
         }
         else {
@@ -538,6 +552,7 @@ class ModelRocketTests: XCTestCase {
             XCTAssertEqual(json["float"].floatValue, Float(4.75), "Floats not equal")
             XCTAssertEqual(json["int"].intValue, -23, "Ints not equal")
             XCTAssertEqual(json["u_int"].uIntValue, UInt(25), "UInts not equal")
+            XCTAssertEqual(json["int64"].int64Value, Int64(2200000000), "Int64s not equal")
             XCTAssertEqual(json["string2"].stringValue, "Test string 2", "Strings not equal")
         }
         else {
@@ -622,6 +637,7 @@ class TestModel: Model {
     let float       = Property<Float>(key: "float")
     let int         = Property<Int>(key: "int")
     let uInt        = Property<UInt>(key: "u_int")
+    let int64       = Property<Int64>(key: "int64")
     let stringEnum  = Property<TestStringEnum>(key: "string_enum")
     let intEnum     = Property<TestIntEnum>(key: "int_enum")
 }

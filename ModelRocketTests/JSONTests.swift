@@ -37,6 +37,7 @@ class JSONTests: XCTestCase {
         "float" : 4.75,
         "int" : -23,
         "u_int" : 25,
+        "int64" : 2200000000,
         "array" : [1, 2, 3, 4, 5],
         "dictionary" : [
             "string1" : "String 1",
@@ -88,6 +89,11 @@ class JSONTests: XCTestCase {
         XCTAssertEqual(vehicleJSON["zero_to_sixty_time"].uIntValue, 4)
         XCTAssertNil(vehicleJSON["model"].uInt)
         
+        // Int64
+        XCTAssertEqual(vehicleJSON["year"].int64Value, 2015)
+        XCTAssertEqual(vehicleJSON["zero_to_sixty_time"].int64Value, 4)
+        XCTAssertNil(vehicleJSON["model"].int64)
+
         // Bool
         XCTAssertEqual(vehicleJSON["nav_system_standard"].boolValue, true)
         XCTAssertNil(vehicleJSON["model"].bool)
@@ -116,6 +122,7 @@ class JSONTests: XCTestCase {
         json["string"] = "Test String"
         json["int"] = 2
         json["uInt"] = 4
+        json["int64"] = 2200000000
         json["float"] = 5.5
         json["bool"] = true
         json["array"] = [1, 2, 3, 4, 5]
@@ -124,6 +131,7 @@ class JSONTests: XCTestCase {
         XCTAssertEqual(json["string"].string!, "Test String")
         XCTAssertEqual(json["int"].int!, 2)
         XCTAssertEqual(json["uInt"].uInt!, 4)
+        XCTAssertEqual(json["int64"].int64!, 2200000000)
         XCTAssertEqual(json["float"].float!, 5.5)
         XCTAssertEqual(json["bool"].bool!, true)
         XCTAssertEqual(json["array"].array!.map { $0.intValue }, [1, 2, 3, 4, 5])
@@ -357,6 +365,25 @@ class JSONTests: XCTestCase {
         XCTAssertEqual(json["u_int"].debugDescription, "25")
     }
     
+    // MARK: - Int64
+    
+    func testInt64() {
+        XCTAssertEqual(json["int64"].int64!, 2200000000)
+        XCTAssertEqual(json["int64"].int64Value, 2200000000)
+        
+        // Mistyped value
+        XCTAssertNil(json["string"].int64)
+        XCTAssertEqual(json["string"].uIntValue, 0)
+        
+        // Missing value
+        XCTAssertNil(json["int642"].int64)
+        XCTAssertEqual(json["int642"].int64Value, 0)
+        
+        // CustomStringConvertible
+        XCTAssertEqual(json["int64"].description, "2200000000")
+        XCTAssertEqual(json["int64"].debugDescription, "2200000000")
+    }
+
     // MARK: - Bool
     
     func testBooleanLiteralConvertible() {
