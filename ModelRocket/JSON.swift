@@ -242,6 +242,18 @@ extension JSON {
     public var uIntValue: UInt { return uInt ?? 0 }
 }
 
+// MARK: - Int64
+
+extension JSON {
+    public var int64: Int64? {
+        if let realObject = object as? NSNumber {
+            return realObject.longLongValue
+        }
+        return nil
+    }
+    public var int64Value: Int64 { return int64 ?? 0 }
+}
+
 // MARK: - Bool
 
 extension JSON {

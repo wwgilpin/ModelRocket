@@ -216,7 +216,7 @@ extension Int64 : JSONTransformable
 {
     public static func fromJSON(json: ModelRocket.JSON) -> Int64?
     {
-        return JSON.object as? Int64
+        return json.int64
     }
     
     public func toJSON() -> AnyObject
